@@ -165,4 +165,5 @@ module.exports = {
   noteList,
   getSingleNote,
   updateNote,
+  deleteNote,
 };
