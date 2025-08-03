@@ -1,11 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const { authenticateToken } = require("../middleware/auth");
-const { createNote, noteList } = require("../controllers/noteController");
+const {
+  createNote,
+  noteList,
+  getSingleNote,
+  updateNote,
+  deleteNote,
+} = require("../controllers/noteController");
 
-router.post("/", authenticateToken, createNote);
-router.get("/", authenticateToken, noteList);
-router.get("/:id", authenticateToken, getSingleNote)
-router.put("/:id", authenticateToken, updateNote);
-router.delete("/:id", authenticateToken, deleteNote);
+// Applying authentication middleware to all routes in this file
+router.use(authenticateToken);
+
+router.route("/").post(createNote).get(noteList);
+
+router.route("/:id").get(getSingleNote).put(updateNote).delete(deleteNote);
 module.exports = router;
