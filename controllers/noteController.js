@@ -85,7 +85,7 @@ const getSingleNote = async (req, res) => {
 
 const updateNote = async (req, res) => {
   const noteId = req.params.id;
-  const { title, content } = req.body;
+  const { title, content, color } = req.body;
   const userId = req.user.userId;
 
   if (!title || !content) {
@@ -96,19 +96,21 @@ const updateNote = async (req, res) => {
   }
 
   try {
-    const exitsNote = await DB.execute(
+    const [existsNote] = await DB.execute(
       "SELECT * FROM notes WHERE id = ? AND user_id = ?",
       [noteId, userId]
     );
-    if (exitsNote[0].length === 0) {
+    
+    if (existsNote.length === 0) {
       return res.status(404).json({
         success: false,
         message: "Note not found or you do not have permission to update it",
       });
     }
+    
     const [result] = await DB.execute(
       "UPDATE notes SET title = ?, content = ?, color = ? WHERE id = ? AND user_id = ?",
-      [title, content, color, noteId, userId]
+      [title, content, color || existsNote[0].color, noteId, userId]
     );
 
     if (result.affectedRows === 0) {
@@ -121,6 +123,12 @@ const updateNote = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Note updated successfully",
+      data: {
+        id: noteId,
+        title,
+        content,
+        color: color || existsNote[0].color
+      }
     });
   } catch (error) {
     console.error("Error updating note:", error);
