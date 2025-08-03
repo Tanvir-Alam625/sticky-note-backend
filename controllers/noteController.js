@@ -1,7 +1,7 @@
 const { pool: DB } = require("../config/database");
 
 const createNote = async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, color } = req.body;
   const userId = req.user.userId;
   if (!title || !content) {
     return res.status(400).json({
@@ -12,8 +12,8 @@ const createNote = async (req, res) => {
 
   try {
     const [result] = await DB.execute(
-      "INSERT INTO notes (user_id, title, content) VALUES (?, ?, ?)",
-      [userId, title, content]
+      "INSERT INTO notes (user_id, title, content, color) VALUES (?, ?, ?, ?)",
+      [userId, title, content, color]
     );
 
     res.status(201).json({
@@ -23,6 +23,7 @@ const createNote = async (req, res) => {
         noteId: result.insertId,
         title,
         content,
+        color,
       },
     });
   } catch (error) {
@@ -106,8 +107,8 @@ const updateNote = async (req, res) => {
       });
     }
     const [result] = await DB.execute(
-      "UPDATE notes SET title = ?, content = ? WHERE id = ? AND user_id = ?",
-      [title, content, noteId, userId]
+      "UPDATE notes SET title = ?, content = ?, color = ? WHERE id = ? AND user_id = ?",
+      [title, content, color, noteId, userId]
     );
 
     if (result.affectedRows === 0) {
