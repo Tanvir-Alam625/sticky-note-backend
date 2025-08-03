@@ -33,7 +33,29 @@ const createNote = async (req, res) => {
     });
   }
 };
+const noteList = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const [notes] = await DB.execute(
+      "SELECT * FROM notes WHERE user_id = ?",
+      [userId]
+    );
+
+    res.status(200).json({
+      success: true,
+      data: notes,
+    });
+  } catch (error) {
+    console.error("Error fetching notes:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error while fetching notes",
+    });
+  }
+}
 
 module.exports = {
   createNote,
+  noteList,
 };
