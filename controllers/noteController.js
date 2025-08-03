@@ -37,10 +37,9 @@ const noteList = async (req, res) => {
   const userId = req.user.userId;
 
   try {
-    const [notes] = await DB.execute(
-      "SELECT * FROM notes WHERE user_id = ?",
-      [userId]
-    );
+    const [notes] = await DB.execute("SELECT * FROM notes WHERE user_id = ?", [
+      userId,
+    ]);
 
     res.status(200).json({
       success: true,
@@ -53,9 +52,38 @@ const noteList = async (req, res) => {
       message: "Internal server error while fetching notes",
     });
   }
-}
+};
+const getSingleNote = async (req, res) => {
+  const noteId = req.params.id;
+  const userId = req.user.userId;
+  try {
+    const [notes] = await DB.execute(
+      "SELECT * FROM notes WHERE id = ? AND user_id = ?",
+      [noteId, userId]
+    );
+
+    if (notes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: notes[0],
+    });
+  } catch (error) {
+    console.error("Error fetching note:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error while fetching note",
+    });
+  }
+};
 
 module.exports = {
   createNote,
   noteList,
+  getSingleNote,
 };
