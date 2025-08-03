@@ -1,10 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
+const { authenticateToken } = require("../middleware/auth");
+const { createNote } = require("../controllers/noteController");
 
-
-
-// router.post('/notes', )
-
+router.post("/", authenticateToken, createNote);
 
 module.exports = router;

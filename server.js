@@ -5,6 +5,7 @@ require("dotenv").config();
 // Import database and routes
 const { testConnection } = require("./config/database");
 const authRoutes = require("./routes/auth");
+const noteRoutes = require("./routes/notes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/notes", noteRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
