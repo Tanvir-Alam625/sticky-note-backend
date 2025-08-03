@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
-const { pool } = require("../config/database");
+const { pool: DB } = require("../config/database");
 
 // Validation rules for registration
 const registerValidation = [
@@ -58,7 +58,7 @@ const register = async (req, res) => {
     const { username, email, password } = req.body;
 
     // Check if user already exists
-    const [existingUsers] = await pool.execute(
+    const [existingUsers] = await DB.execute(
       "SELECT id FROM users WHERE email = ? OR username = ?",
       [email, username]
     );
@@ -75,7 +75,7 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Insert new user
-    const [result] = await pool.execute(
+    const [result] = await DB.execute(
       "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
       [username, email, hashedPassword]
     );
@@ -118,7 +118,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // Find user by email
-    const [users] = await pool.execute(
+    const [users] = await DB.execute(
       "SELECT id, username, email, password FROM users WHERE email = ?",
       [email]
     );
@@ -168,7 +168,7 @@ const getProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const [users] = await pool.execute(
+    const [users] = await DB.execute(
       "SELECT id, username, email, created_at FROM users WHERE id = ?",
       [userId]
     );
