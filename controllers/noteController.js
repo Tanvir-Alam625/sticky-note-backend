@@ -158,7 +158,7 @@ const deleteNote = async (req, res) => {
       message: "Internal server error while deleting note",
     });
   }
-}
+};
 
 module.exports = {
   createNote,
