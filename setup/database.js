@@ -17,7 +17,7 @@ async function setupDatabase() {
   } catch (error) {
     console.error("Database setup failed:", error.message);
   } finally {
-    process.exit(0);
+    process.exit(0); // Exit the process after setup
   }
 }
 

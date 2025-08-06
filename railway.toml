@@ -1,0 +1,13 @@
+# railway.toml
+
+[project]
+name = "your-nodejs-app"
+
+[build]
+command = "npm install"
+
+[start]
+command = "npm run dev"
+
+[plugins.mysql]
+enabled = true
