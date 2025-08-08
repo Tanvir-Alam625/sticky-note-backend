@@ -38,7 +38,7 @@ const noteList = async (req, res) => {
   const userId = req.user.userId;
 
   try {
-    const [notes] = await DB.execute("SELECT * FROM notes WHERE user_id = ?", [
+    const [notes] = await DB.execute("SELECT title, id, user_id FROM notes WHERE user_id = ?", [
       userId,
     ]);
 
