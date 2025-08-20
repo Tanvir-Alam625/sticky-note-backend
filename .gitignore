@@ -2,7 +2,6 @@
 node_modules/
 
 # Environment variables
-.env
 
 # Logs
 logs/
@@ -13,9 +12,9 @@ logs/
 Thumbs.db
 
 # IDE
-.vscode/
 .idea/
 
 # Temporary files
 tmp/
 temp/
+config.bat
